@@ -1,0 +1,93 @@
+{% include "header.html" %}
+
+<section class="flex-container">
+    <h1 class="pt-5 mt-3 text-center font-weight-bold alert alert-primary">Welcome to e-Flower Shop</h1>
+    <div class="row">
+        <div class="col-12" id="hero">
+            <h2>Super Value Deals</h2>
+            <h1>On All Products</h1>
+        </div>
+    </div>
+</section>
+
+<!-- Section -->
+<section id="feature" class="section-p1 container">
+    <div class="row">
+        <div class="fe-box col-md-2 col-sm-4 col-6 shadow-lg">
+            <img src="/static/img/feature/1.jpeg" alt="Free Shipping" class="img-fluid">
+            <h6 class="badge badge-dark">Free Shipping</h6>
+        </div>
+        <div class="fe-box col-md-2 col-sm-4 col-6 shadow-lg">
+            <img src="/static/img/feature/2.jpeg" alt="Online Order" class="img-fluid">
+            <h6 class="badge badge-info">Online Order</h6>
+        </div>
+        <div class="fe-box col-md-2 col-sm-4 col-6 shadow-lg">
+            <img src="/static/img/feature/3.jpeg" alt="Save Money" class="img-fluid">
+            <h6 class="badge badge-success text-center">Save Money</h6>
+        </div>
+        <div class="fe-box col-md-2 col-sm-4 col-6 shadow-lg">
+            <img src="/static/img/feature/4.jpeg" alt="Promotions" class="img-fluid">
+            <h6 class="badge badge-secondary">Promotions</h6>
+        </div>
+        <div class="fe-box col-md-2 col-sm-4 col-6 shadow-lg">
+            <img src="/static/img/feature/5.jpeg" alt="Order" class="img-fluid">
+            <h6 class="badge badge-primary">Order</h6>
+        </div>
+        <div class="fe-box col-md-2 col-sm-4 col-6 shadow-lg">
+            <img src="/static/img/feature/6.jpeg" alt="Happy Sell" class="img-fluid">
+            <h6 class="badge badge-warning">Happy Sell</h6>
+        </div>
+    </div>
+</section>
+
+<section class="container">
+    <div class="row">
+        <p>Explore the enchanting world of flowers and leaves at our shop. Whether you're looking to add a touch of beauty to your home, create stunning floral arrangements, or craft unique decorations, we have a diverse selection to inspire you. Discover our featured flowers and leaves along with the various categories we offer</p>
+    </div>
+</section>
+
+<section class="container">
+    <h2 class="mt-4 text-center font-weight-bold text-success">CATEGORY</h2>
+    <div class="row" id="category">
+        <!-- Categories will be populated here -->
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetchCategory();
+    });
+
+    function redirectToUrl(categoryName) {
+        window.location.href = `/shop/?name=${categoryName}`;
+    }
+
+    async function fetchCategory() {
+        try {
+            const response = await fetch(`/Category/`);
+            const categories = await response.json();
+            console.log(categories)
+            const container = document.getElementById("category");
+            container.innerHTML = "";  // Clear any existing categories
+
+            categories.forEach(category => {
+                container.innerHTML += `
+                    <div class="col-md-6 col-12">
+                        <div class="card Category-card">
+                            <img src="https://tse2.mm.bing.net/th?id=OIP.mFqrWQ1AVecSd1S_4g9x7AHaFj&pid=Api&P=0&h=220" class="card-img-top img-fluid" alt="Category Image">
+                            <div class="card-body">
+                                <h5 class="card-title">${category.name}</h5>
+                                <p class="card-text">${category.description}</p>
+                                <button class="btn btn-primary" onclick="redirectToUrl('${category.name}')">More</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        } catch (error) {
+            alert('Failed to load categories. Please try again later.');
+        }
+    }
+</script>
+
+{% include "footer.html" %}

@@ -1,0 +1,28 @@
+{% include "header.html" %}
+
+<h1 class="alert alert-primary mt-5  text-center font-weight-bold" role="alert">CONTACT US</h1>
+
+<section class="container my-5">
+    <h5 class="text-secondary">If you have any questions, feel free to reach out to us by filling out the form
+        below.</h5>
+
+    <form action="{% url 'Submit_page' %}" method="POST">
+        {% comment %} mention name of url {% endcomment %}
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="nameLabel">Name: </label>
+            <input type="text" class="form-control" id="nameLabel" name="name" placeholder="Enter Name">
+        </div>
+        <div class="form-group">
+            <label for="EmailLabel">Email: </label>
+            <input type="email" class="form-control" name="email" id="EmailLabel" placeholder="Enter Email">
+        </div>
+        <div class="form-group">
+            <label for="messageLabel">message: </label>
+            <textarea class="form-control" id="messageLabel" name="message" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</section>
+
+{% include "footer.html" %}

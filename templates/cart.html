@@ -1,0 +1,131 @@
+{% include "header.html" %}
+
+<h1 class="alert alert-primary text-center font-weight-bold mt-5" role="alert">Your Cart</h1>
+<div class="container mt-5" id="cart">
+    <p class="text-center alert alert-secondary font-weight-bold mb-5">Here are the items you have selected. Review your
+        order before proceeding to checkout!</p>
+
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Flower Name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price per Item</th>
+            <th scope="col">Total Price</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody id="cart-items">
+        <!-- Cart items will be dynamically inserted here -->
+        </tbody>
+    </table>
+
+    <div class="text-right mt-4">
+        <h4 class="text-danger" id="total-price">Total: $0.00</h4>
+    </div>
+
+    <div class="text-center mt-4">
+        <button class="btn btn-success" id="checkout-button">Proceed to Checkout</button>
+        <button class="btn btn-secondary" id="clear-cart-button">Clear Cart</button>
+    </div>
+</div>
+
+<script>
+    // Function to populate the cart items from local storage
+    document.addEventListener("DOMContentLoaded", function () {
+        const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+        console.log(cartItems)
+        const cartItemsContainer = document.getElementById('cart-items');
+        const totalPriceElement = document.getElementById('total-price');
+
+        let totalPrice = 0;
+
+        // Check if cart is empty and handle accordingly
+        if (cartItems.length === 0) {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="5" class="text-center">No items Added in the cart</td>`;
+            cartItemsContainer.appendChild(row);
+            document.getElementById('checkout-button').disabled = true; // Disable checkout if cart is empty
+        } else {
+            // Iterate through the cart items and populate the table
+            cartItems.forEach(item => {
+                // Ensure item has valid properties
+                if (item.name && item.quantity && item.price) { // Check for valid data
+                    const itemPrice = parseFloat(item.price); // Convert price to a number
+                    const itemTotalPrice = itemPrice * item.quantity; // Calculate total price for this item
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.name}</td>
+                        <td>
+                            <button class="btn btn-sm btn-secondary" onclick="decreaseQuantity(${item.id})">-</button>
+                            <span class="mx-2">${item.quantity}</span>
+                            <button class="btn btn-sm btn-secondary" onclick="increaseQuantity(${item.id})">+</button>
+                        </td>
+                        <td>Rs ${itemPrice.toFixed(2)}</td>
+                        <td>Rs ${itemTotalPrice.toFixed(2)}</td>
+                        <td><button class="btn btn-danger btn-sm" onclick="removeFromCart(${item.id})">Remove</button></td>
+                    `;
+                    cartItemsContainer.appendChild(row);
+
+                    totalPrice += itemTotalPrice; // Update the total price
+                } else {
+                    console.error('Invalid item:', item); // Log invalid items
+                }
+            });
+
+            // Update the total price display
+            totalPriceElement.textContent = `Total: Rs ${totalPrice.toFixed(2)}`;
+        }
+    });
+
+    // Function to remove an item from the cart
+    function removeFromCart(itemId) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart = cart.filter(item => item.id !== itemId);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        location.reload(); // Reload the page to update the cart display
+    }
+
+    // Function to clear the cart
+    document.getElementById('clear-cart-button').addEventListener('click', function () {
+        localStorage.removeItem('cart');
+        location.reload(); // Reload the page to reflect the cleared cart
+    });
+
+    document.getElementById('checkout-button').addEventListener('click', async function () {
+        try {
+            window.location.href = "http://127.0.0.1:8000/Order/";
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+        }
+    });
+
+    function increaseQuantity(itemId) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart = cart.map(item => {
+            if (item.id === itemId) {
+                item.quantity += 1; // Increase quantity
+            }
+            return item;
+        });
+        localStorage.setItem('cart', JSON.stringify(cart));
+        location.reload(); // Reload the page to update the cart display
+    }
+
+    // Function to decrease the quantity of an item
+    function decreaseQuantity(itemId) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart = cart.map(item => {
+            if (item.id === itemId && item.quantity > 1) {
+                item.quantity -= 1; // Decrease quantity but ensure it's not less than 1
+            }
+            return item;
+        });
+        localStorage.setItem('cart', JSON.stringify(cart));
+        location.reload(); // Reload the page to update the cart display
+    }
+
+</script>
+
+{% include "footer.html" %}

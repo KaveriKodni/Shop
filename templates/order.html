@@ -1,0 +1,139 @@
+{% include "header.html" %}
+<h1 class="alert alert-primary text-center font-weight-bold mt-5" role="alert">Order Confirmation</h1>
+
+<h1 class="text-center">Your Orders</h1>
+<div class="container mt-5">
+    <table id="order-items" class="table table-striped table-bordered">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Flower Name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="mt-4 border rounded p-3 bg-light row">
+        <h4 class="text-center col-12 btn text-info font-weight-bold">Order Summary</h4>
+        <div class="d-flex justify-content-around col-12">
+            <span>Total Amount:</span>
+            <span id="total-amount">Rs 0.00</span>
+        </div>
+        <div class="d-flex justify-content-around col-12">
+            <span>GST (5%):</span>
+            <span id="gst-amount">Rs 0.00</span>
+        </div>
+        <div class="d-flex justify-content-around font-weight-bold col-12">
+            <span>Grand Total:</span>
+            <span id="grand-total">Rs 0.00</span>
+        </div>
+    </div>
+    <div class="mt-4">
+        <h5>Address:</h5>
+        <textarea id="address" class="form-control required" rows="3" placeholder="Enter your address"></textarea>
+        <input type="text" id="mobile-number" class="form-control mt-2 required"
+               placeholder="Enter your mobile number"/>
+    </div>
+
+    <div class="text-center mt-4">
+        <button class="btn btn-danger" id="cnfrm">Confirm Order</button>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+     const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+     const orderBody = document.querySelector('#order-items tbody'); // Select rows in the table body
+     let totalAmount = 0;
+     let rows = ''; // Initialize rows as an empty string
+
+     // Check if there are items in the cart
+     if (cartItems.length === 0) {
+         orderBody.innerHTML = '<tr><td colspan="3" class="text-center">No items in cart</td></tr>';
+     } else {
+         // Populate the table with cart items
+         cartItems.forEach(item => {
+      <!--        console.log("hi")-->
+             rows += `
+                 <tr>
+                     <td>${item.name}</td>
+                     <td>${item.quantity}</td>
+                     <td>Rs ${parseFloat(item.price).toFixed(2)}</td>
+                 </tr>
+             `;
+             totalAmount += parseFloat(item.price) * item.quantity;
+         });
+
+         // Append all rows at once
+         orderBody.innerHTML = rows;  // Replace the existing rows with new content
+
+         const gstRate = 0.05; // 5% GST
+         const gstAmount = totalAmount * gstRate; // Calculate GST
+         const grandTotal = totalAmount + gstAmount; // Calculate Grand Total
+
+         // Display the amounts
+         document.getElementById('total-amount').innerText = `Rs ${totalAmount.toFixed(2)}`; // Display total amount
+         document.getElementById('gst-amount').innerText = `Rs ${gstAmount.toFixed(2)}`; // Display GST
+         document.getElementById('grand-total').innerText = `Rs ${grandTotal.toFixed(2)}`; // Display grand total
+
+         document.getElementById('cnfrm').addEventListener("click", async function () {
+         if (cartItems.length === 0) {
+             alert("Your cart is empty. Please add items before proceeding to checkout.");
+             return;
+         }
+
+         const address = document.getElementById('address').value.trim();
+         const mobileNumber = document.getElementById('mobile-number').value.trim();
+
+         if (address === "") {
+             alert("Please enter your address.");
+             return; // Exit the function if address is empty
+         }
+         if (mobileNumber === "" || !/^\d{10}$/.test(mobileNumber)) {
+             alert("Please enter a valid 10-digit mobile number.");
+             return; // Exit the function if mobile number is empty or invalid
+         }
+
+         alert("Confirming your order...");
+ <!-- after confirm the data will be stored in database -->
+         try {
+                 // Prepare order data with cart items
+                 const orderData = {
+                     items: cartItems.map(item => ({
+                         flower: item.id,  // assuming item.id corresponds to flower id
+                         quantity: item.quantity,
+                         price: item.price  // assuming the price is stored in the cart
+                     })),
+                     address: address,
+                     mobile_number: mobileNumber
+                 };
+                 const response = await fetch(`/Order/`, {
+                     method: "POST",
+                     headers: {
+                         "Content-Type": "application/json",
+                     },
+                     body: JSON.stringify(orderData) // Send the prepared order data
+                 });
+                 alert("Your order has been confirmed!");
+                  <!-- after confirming order cart should be empty -->
+                 localStorage.removeItem('cart');
+                 window.location.href = `/`; // Change this to your home page URL if different
+
+         } catch (error) {
+             console.error('There was a problem with the fetch operation:', error);
+             alert("There was a problem confirming your order. Please try again.");
+         }
+         });
+     }
+ });
+
+</script>
+
+
+{% include "footer.html" %}

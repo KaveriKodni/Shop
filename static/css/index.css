@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "League Spartan", sans-serif;
+}
+
+h1 {
+    font-size: 50px !important;
+    line-height: 64px !important;
+    color: #222;
+}
+
+h2 {
+    font-size: 46px !important;
+    line-height: 54px !important;
+    color: #222;
+}
+
+h4 {
+    font-size: 22px !important;
+    color: #222;
+}
+
+h6 {
+    font-weight: 700 !important;
+    font-size: 12px !important;
+    color: #222;
+}
+
+p {
+    font-size: 16px
+    margin: 15px 0 20px;
+    color: #465b52;
+}
+
+.section-p1 {
+    padding: 40px 80px;
+}
+
+.section-m1 {
+    margin: 40px 0px;
+}
+
+button {
+    cursor: pointer;
+}
+
+body {
+    width: 100%;
+}
+.Active{
+    color:Red !important;
+    font-weight:700;
+}
+
+.flower-card{
+    transition: transform 0.2s;
+        }
+
+.flower-card:hover {
+    transform: scale(1.05);
+        }
+
+.navbar-brand {
+    font-style: italic;
+    font-weight: bold;
+        }
+
+.footer {
+    margin-top: 50px;
+    padding: 20px 0;
+    text-align: center;
+    background-color: #343a40;
+    color: #fff;
+        }
+
+#hero{
+    background-image: url(/static/img/seasonal-specials.jpg);
+    background-size: 100vw;
+    background-repeat: no-repeat;
+    background-position: top 25% right 40%;
+    opacity: .9;
+    height:50vh;
+    margin-top: 0;
+    padding: 0 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+#hero h4 {
+      padding-bottom: 15px;
+}
+
+#hero h1 {
+    color: #088178;
+
+}
+
+/* feature */
+
+#feature .fe-box img {
+    width: 100%;
+    height:90px;
+    margin-bottom: 10px;
+}
+#feature .fe-box h6 {
+    margin-top:10px;
+    padding: 9px 8px 6px 8px;
+    line-height: 1;
+    border-radius: 4px;
+    color: #040404;
+}
+
+/* Shop page */
+
+#shop_header {
+    background-image: url(/static/img/funeral-flowers.jpg);
+    height:40vh;
+    width: 100vw;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding: 14px;
+}
+
+/* Footer */
+.Footer{
+
+    font-size:20px;
+}
+
+.footer-right i{
+    font-size:30px;
+}
+
+/* Blog Page */
+.blog-post {
+    margin: 0 auto;
+    background: #ffffff; /* White background for the blog post */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* More pronounced shadow for depth */
+    transition: transform 0.2s; /* Smooth hover effect */
+}
+
+.blog-post:hover {
+    transform: scale(1.02); /* Slightly enlarge on hover */
+}
+
+.post-title {
+    font-size: 2.8em; /* Increased size for prominence */
+    margin-bottom: 20px;
+    color: #2c3e50; /* Dark blue color */
+    text-align: center; /* Center the title */
+    font-weight: bold;
+}
+
+.post-content h2 {
+    font-size: 2em; /* Clear hierarchy for subheadings */
+    margin-top: 25px;
+    color: #2980b9; /* Bright blue color for subheadings */
+    padding-bottom: 10px; /* Space below the underline */
+}
+
+.post-content p {
+    margin-bottom: 20px; /* More space between paragraphs */
+    font-size: 1.1em;
+    color: #34495e; /* Darker gray for better readability */
+    line-height: 1.8; /* Increased line height for readability */
+}
+
+/* Contact US */
+
+#Contact_us p{
+    font-size:20px;
+}
+
+#flowers-container .card-img-top{
+    height:60% !important;
+}
+#flowers-container .card-body{
+    height:40% !important;
+}
+
+
+#search #input {
+     width: 200px;
+     height:32px;
+    border-radius: 5px;
+    padding: 2px 10px;
+    border: 1px solid grey;
+    font-weight: 600;
+}
+#search button{
+    padding: 0px 5px;
+    height:32px;
+    border-radius: 5px;
+    border: 3px solid grey;
+}
